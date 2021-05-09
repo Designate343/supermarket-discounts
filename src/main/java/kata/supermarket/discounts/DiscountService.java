@@ -1,6 +1,5 @@
 package kata.supermarket.discounts;
 
-import java.util.Collections;
 import java.util.List;
 
 public class DiscountService {

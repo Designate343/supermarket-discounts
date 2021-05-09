@@ -1,13 +1,13 @@
 package kata.supermarket;
 
 import kata.supermarket.discounts.BuyOneGetOneFree;
+import kata.supermarket.discounts.BuyTwoItemsFor1Pound;
 import kata.supermarket.discounts.DiscountService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import java.math.BigDecimal;
@@ -44,6 +44,21 @@ class BasketTest {
         final Basket basket = new Basket(mockedDiscounts);
         items.forEach(basket::add);
         BigDecimal expectedTotal = hobnobs.oneOf().price().add(aPintOfMilk().price());
+        assertEquals(expectedTotal, basket.total());
+    }
+
+    @Test
+    void buy2ForOnePoundShouldBeApplied() {
+        DiscountService mockedDiscounts = Mockito.mock(DiscountService.class);
+        Mockito.when(mockedDiscounts.getDiscounts()).thenReturn(List.of(new BuyTwoItemsFor1Pound()));
+
+        UUID hobnobProductId = UUID.randomUUID();
+        Product hobnobs = new Product(new BigDecimal("1.17"), hobnobProductId);
+
+        List<Item> items = List.of(hobnobs.oneOf(), hobnobs.oneOf(), aPintOfMilk());
+        final Basket basket = new Basket(mockedDiscounts);
+        items.forEach(basket::add);
+        BigDecimal expectedTotal = new BigDecimal(1).add(aPintOfMilk().price());
         assertEquals(expectedTotal, basket.total());
     }
 
