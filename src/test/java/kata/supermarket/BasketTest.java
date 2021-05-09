@@ -1,13 +1,20 @@
 package kata.supermarket;
 
+import kata.supermarket.discounts.BuyOneGetOneFree;
+import kata.supermarket.discounts.DiscountService;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -18,9 +25,26 @@ class BasketTest {
     @MethodSource
     @ParameterizedTest(name = "{0}")
     void basketProvidesTotalValue(String description, String expectedTotal, Iterable<Item> items) {
-        final Basket basket = new Basket();
+        DiscountService mockedDiscounts = Mockito.mock(DiscountService.class);
+        Mockito.when(mockedDiscounts.getDiscounts()).thenReturn(Collections.emptyList());
+        final Basket basket = new Basket(mockedDiscounts);
         items.forEach(basket::add);
         assertEquals(new BigDecimal(expectedTotal), basket.total());
+    }
+
+    @Test
+    void buyOneGetOneFreeDiscountShouldBeApplied() {
+        DiscountService mockedDiscounts = Mockito.mock(DiscountService.class);
+        Mockito.when(mockedDiscounts.getDiscounts()).thenReturn(List.of(new BuyOneGetOneFree()));
+
+        UUID hobnobProductId = UUID.randomUUID();
+        Product hobnobs = new Product(new BigDecimal("1.17"), hobnobProductId);
+
+        List<Item> items = List.of(hobnobs.oneOf(), hobnobs.oneOf(), aPintOfMilk());
+        final Basket basket = new Basket(mockedDiscounts);
+        items.forEach(basket::add);
+        BigDecimal expectedTotal = hobnobs.oneOf().price().add(aPintOfMilk().price());
+        assertEquals(expectedTotal, basket.total());
     }
 
     static Stream<Arguments> basketProvidesTotalValue() {
@@ -57,15 +81,15 @@ class BasketTest {
     }
 
     private static Item aPintOfMilk() {
-        return new Product(new BigDecimal("0.49")).oneOf();
+        return new Product(new BigDecimal("0.49"), UUID.randomUUID()).oneOf();
     }
 
     private static Item aPackOfDigestives() {
-        return new Product(new BigDecimal("1.55")).oneOf();
+        return new Product(new BigDecimal("1.55"), UUID.randomUUID()).oneOf();
     }
 
     private static WeighedProduct aKiloOfAmericanSweets() {
-        return new WeighedProduct(new BigDecimal("4.99"));
+        return new WeighedProduct(new BigDecimal("4.99"), UUID.randomUUID());
     }
 
     private static Item twoFiftyGramsOfAmericanSweets() {
@@ -73,7 +97,7 @@ class BasketTest {
     }
 
     private static WeighedProduct aKiloOfPickAndMix() {
-        return new WeighedProduct(new BigDecimal("2.99"));
+        return new WeighedProduct(new BigDecimal("2.99"), UUID.randomUUID());
     }
 
     private static Item twoHundredGramsOfPickAndMix() {

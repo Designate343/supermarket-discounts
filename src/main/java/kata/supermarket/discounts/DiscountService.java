@@ -10,6 +10,6 @@ public class DiscountService {
      * @return the discounts to be applied
      */
     public List<Discount> getDiscounts() {
-        return Collections.emptyList();
+        return List.of(new BuyOneGetOneFree());
     }
 }

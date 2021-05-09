@@ -13,9 +13,9 @@ public class Basket {
     private final List<Item> items;
     private final DiscountService discountService;
 
-    public Basket() {
+    public Basket(DiscountService discountService) {
         this.items = new ArrayList<>();
-        this.discountService = new DiscountService();
+        this.discountService = discountService;
     }
 
     public void add(final Item item) {

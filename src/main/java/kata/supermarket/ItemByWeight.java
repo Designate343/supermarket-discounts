@@ -1,6 +1,7 @@
 package kata.supermarket;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 public class ItemByWeight implements Item {
 
@@ -14,5 +15,10 @@ public class ItemByWeight implements Item {
 
     public BigDecimal price() {
         return product.pricePerKilo().multiply(weightInKilos).setScale(2, BigDecimal.ROUND_HALF_UP);
+    }
+
+    @Override
+    public UUID itemId() {
+        return product.getProductId();
     }
 }
