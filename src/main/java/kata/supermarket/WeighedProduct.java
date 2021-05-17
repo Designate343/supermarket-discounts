@@ -7,10 +7,12 @@ public class WeighedProduct {
 
     private final BigDecimal pricePerKilo;
     private final UUID productId;
+    private final String productName;
 
-    public WeighedProduct(final BigDecimal pricePerKilo, UUID productId) {
+    public WeighedProduct(final BigDecimal pricePerKilo, UUID productId, String productName) {
         this.pricePerKilo = pricePerKilo;
         this.productId = productId;
+        this.productName = productName;
     }
 
     BigDecimal pricePerKilo() {
@@ -23,5 +25,9 @@ public class WeighedProduct {
 
     public UUID getProductId() {
         return productId;
+    }
+
+    public String getProductName() {
+        return productName;
     }
 }

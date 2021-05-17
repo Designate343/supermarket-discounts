@@ -7,10 +7,12 @@ public class Product {
 
     private final BigDecimal pricePerUnit;
     private final UUID productId;
+    private final String productName;
 
-    public Product(final BigDecimal pricePerUnit, UUID productId) {
+    public Product(final BigDecimal pricePerUnit, UUID productId, String productName) {
         this.pricePerUnit = pricePerUnit;
         this.productId = productId;
+        this.productName = productName;
     }
 
     BigDecimal pricePerUnit() {
@@ -24,5 +26,9 @@ public class Product {
 
     public UUID getProductId() {
         return productId;
+    }
+
+    public String getProductName() {
+        return productName;
     }
 }

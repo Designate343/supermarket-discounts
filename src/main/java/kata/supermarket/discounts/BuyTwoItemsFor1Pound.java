@@ -4,10 +4,7 @@ import kata.supermarket.Item;
 import kata.supermarket.ItemByUnit;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class BuyTwoItemsFor1Pound implements Discount {
 
@@ -32,4 +29,5 @@ public class BuyTwoItemsFor1Pound implements Discount {
         }
         return discount;
     }
+
 }

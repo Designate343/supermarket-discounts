@@ -21,4 +21,14 @@ public class ItemByWeight implements Item {
     public UUID itemId() {
         return product.getProductId();
     }
+
+    @Override
+    public String name() {
+        return product.getProductName();
+    }
+
+    @Override
+    public BigDecimal amountOf() {
+        return weightInKilos;
+    }
 }
